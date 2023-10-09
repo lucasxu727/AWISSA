@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWISSA</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <script>
+      src = "./main.js";
+    </script>
+  </head>
+  <body>
+    <h1 style="text-align: center">AWISSA</h1>
+    <h3 style="text-align: center">Adressing the Wildfire issue in the DRC</h3>
+    <div id="map" style="height: 400px"></div>
+    <h4 id="prediction">-----</h4>
+
+    <!-- Include Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+      props_arr = [
+        "temperature_2m",
+        "relativehumidity_2m",
+        "precipitation",
+        "windspeed_10m",
+        "soil_moisture_0_to_7cm",
+      ];
+      // Initialize the map
+      var myMap = L.map("map").setView([4.0383, 21.7587], 13); // Coordinates: [latitude, longitude], Zoom level
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(myMap);
+
+      // Function to handle the click event on the map
+      function onMapClick(e) {
+        var latitude = e.latlng.lat;
+        var longitude = e.latlng.lng;
+
+        // Display latitude and longitude in the console
+        console.log("Latitude: " + latitude + ", Longitude: " + longitude);
+
+        // Send a fetch request to an API
+        fetch(
+          "https://archive-api.open-meteo.com/v1/archive?latitude=" +
+            latitude +
+            "&longitude=" +
+            longitude +
+            "&start_date=2023-08-10&end_date=2023-08-10&hourly=temperature_2m,relativehumidity_2m,precipitation,windspeed_10m,soil_moisture_0_to_7cm",
+          {
+            method: "POST", // You can change this to GET or another method if needed
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ latitude: latitude, longitude: longitude }),
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            let array = [];
+            for (item in props_arr) {
+              let vals = data.hourly[item];
+              let avg = 0;
+              for (let i = 0; i < vals.length; i++) {
+                avg += vals[i];
+              }
+              avg /= vals.length;
+              array.push(avg);
+            }
+            let json = JSON.stringify(array);
+            fetch("http://127.0.0.1:5000/predict", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: json,
+            })
+              .then((resp) => resp.json())
+              .then((num) => {
+                document.getElementById("prediction").innerHTML =
+                  num.prediction;
+              });
+          })
+          .catch((error) => {
+            // Handle errors here
+            console.error("API Error:", error);
+          });
+      }
+
+      // Add a click event listener to the map
+      myMap.on("click", onMapClick);
+    </script>
+  </body>
+</html>
