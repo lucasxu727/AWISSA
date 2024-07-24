@@ -1,4 +1,6 @@
 # AWISSA
+## Saras Agrawal, Rateb Ajamieh, Jai Pannu, Lucas Xu
+
 NASA Space Apps 2023 Hackathon 
 
 AWISSA - Created by SpaceMonkeys
@@ -12,6 +14,11 @@ AWISSA PROGRAMS ARE DEFINED TO PREDICT, CALCULATE, ASSESS, AND COMMUNICATE WILDF
 TensorFlow AI's judgement could/should have been improved by joining FRP with another metric.
 
 Please note that our TensorFlow AI's potential was unfortunately constrained by the time limit.
+
+## Usage
+
+## How it works
+
 
 *Please do not reproduce without credit, read Liscense*
 
