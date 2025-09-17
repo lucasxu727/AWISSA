@@ -1,5 +1,5 @@
 # AWISSA
-## Saras Agrawal, Rateb Ajamieh, Jai Pannu, Lucas Xu
+## Saras Agrawal, Rateb Ajamieh, Jai Pannu, Lucas Xu, Andrew Yang
 
 ## https://awissa.notion.site/AWISSA-Addressing-Wildfire-Issues-in-the-Democratic-Republic-of-Congo-fa63271a8a754d35ad680ebaa2d27f3e 
 ## Further detailed information and in-depth explanations will be on the notion site, this readme is a more vague summary of the project
